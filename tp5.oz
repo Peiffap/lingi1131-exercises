@@ -208,8 +208,15 @@ end
 
 % 3.d.ii
 % Using bounded buffers, we can limit the rate at which the producer produces,
-% hence stopping it from making the buffers overflow.
+% hence stopping it from making the memory overflow.
+% Memory overflow can happen if one consumer is faster
+% because the producer will have to keep producing for the fast consumer
+% while still keeping the other results in memory for the slower consumer.
+% If no bounded buffer is used, then the gap will always get bigger,
+% and the memory will overflow eventually.
 
 % We can set the buffer size to 1500,
 % since that is the largest the difference can possibly get.
 % Alternatively, we can use a bounded buffer for each consumer.
+% This fixes the issues with memory overflow
+% without hindering the faster consumers too much.

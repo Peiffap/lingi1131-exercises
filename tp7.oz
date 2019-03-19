@@ -154,3 +154,77 @@ proc {WatchPs I Ps}
 end
 
 {WatchPs {OS.rand} mod 10 Ps}
+
+% 4
+declare
+proc {WaitOr X Y}
+   local Z in
+      thread
+	 {Wait X}
+	 Z = true
+      end
+      thread
+	 {Wait Y}
+	 Z = true
+      end
+      {Wait Z}
+   end
+end
+
+% 5
+declare
+fun {WaitOrValue X Y}
+   local Z in
+      thread
+	 {Wait X}
+	 Z = X
+      end
+      thread
+	 {Wait Y}
+	 Z = Y
+      end
+      {Wait Z}
+      Z
+   end
+end
+
+% 6
+declare
+fun {Counter InS}
+   fun {ListAdd L E}
+      case L
+      of nil then [E#1]
+      [] H|T then
+	 if H.1 == E then
+	    E#(H.2+1)|T
+	 else
+	    H|{ListAdd T E}
+	 end
+      end
+   end
+   fun {Count Curr Next NextEnd Acc}
+      case Curr
+      of nil then
+	 NextEnd = nil
+	 if Next == nil then nil
+	 else Next2 in {Count Next Next2 Next2 Acc}
+	 end
+      [] InSi|InSr then
+	 case InSi
+	 of nil then {Count InSr Next NextEnd Acc}
+	 [] H|T then Acc2 NextEnd2 in
+	    NextEnd = T|NextEnd2
+	    Acc2 = {ListAdd Acc H}
+	    Acc2|{Count InSr Next NextEnd2 Acc2}
+	 end
+      end
+   end
+   Next
+in
+   thread {Count InS Next Next nil} end
+end
+
+% If one of the pipes stops rescuing with nil, then we just skip over it.
+% If it stops with an unbound tail, then the program blocks.
+
+% The solution already works for any number of pipes.
