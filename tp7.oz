@@ -146,11 +146,11 @@ end
 
 proc {WatchPs I Ps}
    for J in 1..100 do
-      if Ps.J.type == I then thread {Wait Ps.J.flag} end
+      if Ps.J.type == I then {Wait Ps.J.flag}
       else skip
       end
    end
-   {Browse "all the threads of type I are finished"}
+   {Browse 'all the threads of type I are finished'}
 end
 
-{WatchPs 1 Ps}
+{WatchPs {OS.rand} mod 10 Ps}
