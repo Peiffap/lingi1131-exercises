@@ -158,33 +158,17 @@ end
 % 4
 declare
 proc {WaitOr X Y}
-   local Z in
-      thread
-	 {Wait X}
-	 Z = true
-      end
-      thread
-	 {Wait Y}
-	 Z = true
-      end
-      {Wait Z}
-   end
+       {Record.waitOr '#'(X Y)}
 end
 
 % 5
 declare
 fun {WaitOrValue X Y}
    local Z in
-      thread
-	 {Wait X}
-	 Z = X
+      Z = {WaitOr X Y}
+      if Z == 1 then X
+      else Y
       end
-      thread
-	 {Wait Y}
-	 Z = Y
-      end
-      {Wait Z}
-      Z
    end
 end
 
