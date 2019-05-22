@@ -166,7 +166,7 @@ end
 
 % 4
 declare
-proc {WaitOr X Y}
+fun {WaitOr X Y}
        {Record.waitOr '#'(X Y)}
 end
 
