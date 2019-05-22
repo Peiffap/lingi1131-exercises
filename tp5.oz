@@ -133,7 +133,7 @@ declare
 fun {Simulate G Ss}
    case G
    of input(X) then Ss.X
-   [] gate(Y) then
+   [] Y then
       if Y.value == 'and' then {AndGate {Simulate Y.1 Ss} {Simulate Y.2 Ss}}
       elseif Y.value == 'or' then {OrGate {Simulate Y.1 Ss} {Simulate Y.2 Ss}}
       elseif Y.value == 'not' then {NotGate {Simulate Y.1 Ss}}
