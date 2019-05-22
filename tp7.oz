@@ -25,39 +25,48 @@ fun {Nth S N}
 end
 
 % 1.c
-declare
-proc {Ints N ?R}
-   local R1 N1 in
-      thread
-	 {WaitNeeded R}
-	 N1 = N+1
-	 R = N|{Ints N1 R1}
-      end
-   end
-end
-proc {Sum2 Xs Ys ?R}
-   local R1 R2 R3 in
-      thread
-	 {WaitNeeded R}
-	 R1 = Xs#Ys
-	 case R1
-	 of (X|Xr)#(Y|Yr) then
-	    R2 = X+Y
-	    R = R2|{Sum2 Xr Yr R3}
+declare Ints in
+proc {Ints N Result2}
+   local Fun1 in
+      proc {Fun1 Result3}
+	 local R A1 A2 in
+	    Result3 = '|'(N R)
+	    A2 = 1
+	    A1 = N + A2
+	    {Ints A1 R}
 	 end
       end
+      {WaitNeeded Result2}
+      {Fun1 Result2}
    end
 end
-proc {Nth S N ?R}
-   local Zero N1 R1 in
-      if N < Zero then R = error
-      elseif N == Zero then R = S.1
-      else
-	 N1 = N-1
-	 {Nth S.2 N1 R1}
+
+declare Sum2 in
+proc {Sum2 Xs Ys Result3}
+   local Fun1 in
+      proc {Fun1 Result4}
+	 local A1 in
+	    A1 = '#'(Xs Ys)
+	    case A1 of '#'('|'(X Xr) '|'(Y Yr)) then
+	       local R1 R2 in
+		  Result4 = '|'(R1 R2)
+		  R1 = X + Y
+		  {Sum2 Xr Yr R2}
+	       end
+	    end
+	 end
       end
+      {WaitNeeded Result3}
+      {Fun1 Result3}
    end
 end
+
+
+declare S R1 R2
+thread {Ints 1 R1} end
+thread {Sum2 S R1 R2} end
+S = 0|R2
+{Browse S.2.2.1}
 
 % 1.d
 % Lazy suspensions occur when a function does not need to keep executing
