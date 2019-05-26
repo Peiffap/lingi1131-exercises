@@ -120,7 +120,6 @@ end
 % The reason for this is that the call to Show is blocking,
 % while the call to Browse is not.
 
-% 5.b
 declare
 proc {MapRecord R1 F ?R2}
    A = {Record.arity R1}
@@ -139,4 +138,47 @@ end
 {Show {MapRecord '#'(a:1 b:2 c:3 d:4 e:5 f:6 g:7)
        fun {$ X} {Delay 1000} 2*X end}}
 
-% TODO 5.b + 5.c
+% 5.b
+declare
+proc {MapRecord R1 F ?R2 ?Done}
+   A = {Record.arity R1}
+   proc {Loop L}
+      case L of nil then thread {Delay 5000} Done = unit end
+      [] H|T then
+	 thread R2.H = {F R1.H} end
+	 {Loop T}
+      end
+   end
+in
+   R2 = {Record.make {Record.label R1} A}
+   {Loop A}
+end
+
+local Done in
+   {Browse {MapRecord '#'(a:1 b:2 c:3 d:4 e:5 f:6 g:7)
+	    fun {$ X} {Delay 1000} 2*X end $ Done}}
+   {Browse Done}
+end
+
+% 5.c
+declare
+proc {MapRecord R1 F ?R2 ?Done}
+   A = {Record.arity R1}
+   proc {Loop L}
+      case L of nil then thread {Delay 5000} Done = unit end
+      [] H|T then
+	 thread R2.H = {F R1.H} end
+	 {Loop T}
+      end
+   end
+in
+   R2 = {Record.make {Record.label R1} A}
+   {Loop A}
+   {Wait Done}
+end
+
+local Done in
+   {Browse {MapRecord '#'(a:1 b:2 c:3 d:4 e:5 f:6 g:7)
+	    fun {$ X} {Delay 1000} 2*X end $ Done}}
+   {Browse Done}
+end
