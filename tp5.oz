@@ -163,7 +163,7 @@ L1 L2 F
 L1 = [1 2 3]
 F = fun {$ X} {Delay 200} X*X end
 thread L2 = {Map L1 F} end
-{Wait L2}
+{Wait L2.2.2.1}
 {Show L2}
 
 % 3.b
@@ -173,9 +173,9 @@ L1 = [1 2 3]
 thread L2 = {Map L1 fun {$ X} {Delay 200} X*X end} end
 thread L3 = {Map L1 fun {$ X} {Delay 200} 2*X end} end
 thread L4 = {Map L1 fun {$ X} {Delay 200} 3*X end} end
-{Wait L2}
-{Wait L3}
-{Wait L4}
+{Wait L2.2.2.1}
+{Wait L3.2.2.1}
+{Wait L4.2.2.1}
 {Show L2#L3#L4}
 
 % 3.c.i + 3.c.ii
